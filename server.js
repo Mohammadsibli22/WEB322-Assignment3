@@ -1,11 +1,6 @@
 /********************************************************************************
 * WEB322 – Assignment 03
-*
-* I declare that this assignment is my own work in accordance with Seneca's
-* Academic Integrity Policy
-*
 * Name: Mohammadsibli Pathan  Student ID: 189933237  Date: 02/12/2025
-*
 ********************************************************************************/
 
 require('dotenv').config();
@@ -19,11 +14,9 @@ const bcrypt = require('bcryptjs');
 const clientSessions = require('client-sessions');
 const path = require('node:path');
 
-// Because server.js is now inside /api/
-// use "../" to reach project root
-const { mongoose, sequelize } = require('../modules/db');
-const User = require('../models/User');
-const Task = require('../models/Task');
+const { mongoose, sequelize } = require('./modules/db');
+const User = require('./models/User');
+const Task = require('./models/Task');
 
 // ----------------------
 // EXPRESS APP
@@ -34,12 +27,12 @@ const app = express();
 // VIEW ENGINE
 // ----------------------
 app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, '../views'));   // <-- REQUIRED FOR VERCEL
+app.set('views', path.join(__dirname, 'views'));   // ROOT VERSION
 
 // ----------------------
 // STATIC FILES
 // ----------------------
-app.use(express.static(path.join(__dirname, '../public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // ----------------------
 // MIDDLEWARE
@@ -71,14 +64,10 @@ function ensureLogin(req, res, next) {
 // ----------------------
 // ROUTES
 // ----------------------
-
-// HOME
 app.get('/', (req, res) => res.redirect('/register'));
 
-// REGISTER PAGE
 app.get('/register', (req, res) => res.render('register', { errorMsg: '' }));
 
-// REGISTER USER
 app.post('/register', async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -101,10 +90,8 @@ app.post('/register', async (req, res) => {
     }
 });
 
-// LOGIN PAGE
 app.get('/login', (req, res) => res.render('login', { errorMsg: '' }));
 
-// LOGIN
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
@@ -131,18 +118,15 @@ app.post('/login', async (req, res) => {
     }
 });
 
-// LOGOUT
 app.get('/logout', (req, res) => {
     req.session.reset();
     res.redirect('/login');
 });
 
-// DASHBOARD
 app.get('/dashboard', ensureLogin, (req, res) => {
     res.render('dashboard');
 });
 
-// LIST TASKS
 app.get('/tasks', ensureLogin, async (req, res) => {
     try {
         const tasks = await Task.findAll({
@@ -156,12 +140,10 @@ app.get('/tasks', ensureLogin, async (req, res) => {
     }
 });
 
-// ADD TASK PAGE
 app.get('/tasks/add', ensureLogin, (req, res) => {
     res.render('addTask', { errorMsg: '' });
 });
 
-// ADD TASK
 app.post('/tasks/add', ensureLogin, async (req, res) => {
     const { title, description, dueDate } = req.body;
 
@@ -183,7 +165,6 @@ app.post('/tasks/add', ensureLogin, async (req, res) => {
     }
 });
 
-// EDIT TASK PAGE
 app.get('/tasks/edit/:id', ensureLogin, async (req, res) => {
     const task = await Task.findByPk(req.params.id);
 
@@ -193,7 +174,6 @@ app.get('/tasks/edit/:id', ensureLogin, async (req, res) => {
     res.render('editTask', { task });
 });
 
-// UPDATE TASK
 app.post('/tasks/edit/:id', ensureLogin, async (req, res) => {
     const { title, description, dueDate, status } = req.body;
 
@@ -217,7 +197,6 @@ app.post('/tasks/edit/:id', ensureLogin, async (req, res) => {
     }
 });
 
-// DELETE TASK
 app.post('/tasks/delete/:id', ensureLogin, async (req, res) => {
     const task = await Task.findByPk(req.params.id);
 
@@ -228,7 +207,6 @@ app.post('/tasks/delete/:id', ensureLogin, async (req, res) => {
     res.redirect('/tasks');
 });
 
-// UPDATE STATUS
 app.post('/tasks/status/:id', ensureLogin, async (req, res) => {
     const task = await Task.findByPk(req.params.id);
 
@@ -239,10 +217,10 @@ app.post('/tasks/status/:id', ensureLogin, async (req, res) => {
     res.redirect('/tasks');
 });
 
-// 404 PAGE
+// 404
 app.use((req, res) => {
     res.status(404).render('404');
 });
 
-// EXPORT FOR VERCEL SERVERLESS
+// EXPORT FOR VERCEL
 module.exports = app;
