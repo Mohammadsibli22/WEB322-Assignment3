@@ -2,17 +2,12 @@
 * WEB322 – Assignment 03
 *
 * I declare that this assignment is my own work in accordance with Seneca's
-* Academic Integrity Policy:
-*
-* https://www.senecapolytechnic.ca/about/policies/academic-integrity-policy.html
+* Academic Integrity Policy
 *
 * Name: Mohammadsibli Pathan  Student ID: 189933237  Date: 02/12/2025
 *
 ********************************************************************************/
 
-// ----------------------
-// LOAD ENVIRONMENT VARS
-// ----------------------
 require('dotenv').config();
 
 // ----------------------
@@ -24,26 +19,27 @@ const bcrypt = require('bcryptjs');
 const clientSessions = require('client-sessions');
 const path = require('node:path');
 
-const { mongoose, sequelize } = require('./modules/db');
-const User = require('./models/User');
-const Task = require('./models/Task');
+// Because server.js is now inside /api/
+// use "../" to reach project root
+const { mongoose, sequelize } = require('../modules/db');
+const User = require('../models/User');
+const Task = require('../models/Task');
 
 // ----------------------
 // EXPRESS APP
 // ----------------------
 const app = express();
-const PORT = process.env.PORT || 8080;
 
 // ----------------------
 // VIEW ENGINE
 // ----------------------
 app.set('view engine', 'ejs');
-app.set('views', __dirname + '/views');   // REQUIRED FOR VERCEL
+app.set('views', path.join(__dirname, '../views'));   // <-- REQUIRED FOR VERCEL
 
 // ----------------------
 // STATIC FILES
 // ----------------------
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, '../public')));
 
 // ----------------------
 // MIDDLEWARE
@@ -76,13 +72,11 @@ function ensureLogin(req, res, next) {
 // ROUTES
 // ----------------------
 
-// HOME → redirect to register
+// HOME
 app.get('/', (req, res) => res.redirect('/register'));
 
 // REGISTER PAGE
-app.get('/register', (req, res) => {
-    res.render('register', { errorMsg: '' });
-});
+app.get('/register', (req, res) => res.render('register', { errorMsg: '' }));
 
 // REGISTER USER
 app.post('/register', async (req, res) => {
@@ -101,7 +95,6 @@ app.post('/register', async (req, res) => {
         await newUser.save();
 
         res.render('message', { message: 'registration successful!' });
-
     } catch (err) {
         console.error(err);
         res.render('register', { errorMsg: 'Error registering user' });
@@ -109,20 +102,20 @@ app.post('/register', async (req, res) => {
 });
 
 // LOGIN PAGE
-app.get('/login', (req, res) => {
-    res.render('login', { errorMsg: '' });
-});
+app.get('/login', (req, res) => res.render('login', { errorMsg: '' }));
 
-// LOGIN LOGIC
+// LOGIN
 app.post('/login', async (req, res) => {
     const { username, password } = req.body;
 
     try {
         const user = await User.findOne({ username });
-        if (!user) return res.render('login', { errorMsg: 'Invalid username or password' });
+        if (!user)
+            return res.render('login', { errorMsg: 'Invalid username or password' });
 
         const match = await bcrypt.compare(password, user.password);
-        if (!match) return res.render('login', { errorMsg: 'Invalid username or password' });
+        if (!match)
+            return res.render('login', { errorMsg: 'Invalid username or password' });
 
         req.session.user = {
             id: user._id.toString(),
@@ -156,10 +149,8 @@ app.get('/tasks', ensureLogin, async (req, res) => {
             where: { userId: req.session.user.id },
             order: [['createdAt', 'DESC']]
         });
-
         res.render('tasks', { tasks });
-    }
-    catch (err) {
+    } catch (err) {
         console.error(err);
         res.render('message', { message: 'Error fetching tasks' });
     }
@@ -186,14 +177,13 @@ app.post('/tasks/add', ensureLogin, async (req, res) => {
         });
 
         res.redirect('/tasks');
-    }
-    catch (err) {
+    } catch (err) {
         console.error(err);
         res.render('addTask', { errorMsg: 'Error creating task' });
     }
 });
 
-// EDIT PAGE
+// EDIT TASK PAGE
 app.get('/tasks/edit/:id', ensureLogin, async (req, res) => {
     const task = await Task.findByPk(req.params.id);
 
@@ -221,8 +211,7 @@ app.post('/tasks/edit/:id', ensureLogin, async (req, res) => {
         });
 
         res.redirect('/tasks');
-    }
-    catch (err) {
+    } catch (err) {
         console.error(err);
         res.render('message', { message: 'Error updating task' });
     }
@@ -239,7 +228,7 @@ app.post('/tasks/delete/:id', ensureLogin, async (req, res) => {
     res.redirect('/tasks');
 });
 
-// CHANGE STATUS
+// UPDATE STATUS
 app.post('/tasks/status/:id', ensureLogin, async (req, res) => {
     const task = await Task.findByPk(req.params.id);
 
@@ -255,18 +244,5 @@ app.use((req, res) => {
     res.status(404).render('404');
 });
 
-// ----------------------
-// START SERVER (LOCAL ONLY)
-// ----------------------
-if (process.env.VERCEL !== "1") {
-    sequelize.sync().then(() => {
-        app.listen(PORT, () =>
-            console.log(`Local server running on port ${PORT}`)
-        );
-    });
-}
-
-// ----------------------
-// EXPORT FOR VERCEL
-// ----------------------
+// EXPORT FOR VERCEL SERVERLESS
 module.exports = app;
