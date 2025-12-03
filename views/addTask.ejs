@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"/><title>Add Task</title></head>
+<body>
+  <%- include('partials/header', { user: user }) %>
+  <h2>Add Task</h2>
+  <form method="post" action="/tasks/add">
+    <label>Title: <input name="title" required /></label><br/>
+    <label>Description: <textarea name="description"></textarea></label><br/>
+    <label>Due Date: <input type="datetime-local" name="dueDate" /></label><br/>
+    <button type="submit">Add</button>
+  </form>
+  <p style="color:red"><%= errorMsg %></p>
+</body>
+</html>

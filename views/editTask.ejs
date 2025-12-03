@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"/><title>Edit Task</title></head>
+<body>
+  <%- include('partials/header', { user: user }) %>
+  <h2>Edit Task</h2>
+  <form method="post" action="/tasks/edit/<%= task.id %>">
+    <label>Title: <input name="title" value="<%= task.title %>" required /></label><br/>
+    <label>Description: <textarea name="description"><%= task.description %></textarea></label><br/>
+    <label>Due Date: <input type="datetime-local" name="dueDate" value="<%= task.dueDate ? new Date(task.dueDate).toISOString().slice(0,16) : '' %>" /></label><br/>
+    <label>Status:
+      <select name="status">
+        <option value="pending" <%= task.status==='pending' ? 'selected' : '' %>>Pending</option>
+        <option value="completed" <%= task.status==='completed' ? 'selected' : '' %>>Completed</option>
+      </select>
+    </label><br/>
+    <button type="submit">Save</button>
+  </form>
+</body>
+</html>

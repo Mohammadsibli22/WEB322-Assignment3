@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"/><title>Tasks</title></head>
+<body>
+  <%- include('partials/header', { user: user }) %>
+  <h2>Your Tasks</h2>
+  <p><a href="/tasks/add">Add a new task</a></p>
+  <% if (tasks && tasks.length) { %>
+    <table border="1">
+      <tr><th>Title</th><th>Due</th><th>Status</th><th>Actions</th></tr>
+      <% tasks.forEach(task => { %>
+        <tr>
+          <td><%= task.title %></td>
+          <td><%= task.dueDate ? new Date(task.dueDate).toLocaleString() : '' %></td>
+          <td><%= task.status %></td>
+          <td>
+            <a href="/tasks/edit/<%= task.id %>">Edit</a>
+            <form style="display:inline" method="post" action="/tasks/delete/<%= task.id %>">
+              <button type="submit" onclick="return confirm('Delete task?')">Delete</button>
+            </form>
+            <form style="display:inline" method="post" action="/tasks/status/<%= task.id %>">
+              <input type="hidden" name="status" value="<%= task.status === 'pending' ? 'completed' : 'pending' %>" />
+              <button type="submit"><%= task.status === 'pending' ? 'Mark Completed' : 'Mark Pending' %></button>
+            </form>
+          </td>
+        </tr>
+      <% }) %>
+    </table>
+  <% } else { %>
+    <p>No tasks yet.</p>
+  <% } %>
+</body>
+</html>

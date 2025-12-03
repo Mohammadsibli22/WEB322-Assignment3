@@ -1,0 +1,9 @@
+<header>
+  <h1>WEB322 Task App</h1>
+  <% if (user) { %>
+    <p>Welcome, <%= user.username %> | <a href="/dashboard">Dashboard</a> | <a href="/tasks">Tasks</a> | <a href="/logout">Logout</a></p>
+  <% } else { %>
+    <p><a href="/login">Login</a> | <a href="/register">Register</a></p>
+  <% } %>
+  <hr />
+</header>

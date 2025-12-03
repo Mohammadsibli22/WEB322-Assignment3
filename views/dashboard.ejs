@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head><meta charset="utf-8"/><title>Dashboard</title></head>
+<body>
+  <%- include('partials/header', { user: user }) %>
+  <h2>Dashboard</h2>
+  <h3>Hello <%= user.username %></h3>
+  <p>Your email: <%= user.email %></p>
+  <p><a href="/tasks">View Your Tasks</a> | <a href="/tasks/add">Add Task</a></p>
+</body>
+</html>
