@@ -1,6 +1,14 @@
+
 /********************************************************************************
 * WEB322 – Assignment 03
-* Name: Mohammadsibli Pathan  Student ID: 189933237  Date: 02/12/2025
+*
+* I declare that this assignment is my own work in accordance with Seneca's
+* Academic Integrity Policy:
+*
+* https://www.senecapolytechnic.ca/about/policies/academic-integrity-policy.html
+*
+* Name: MohammadSibli Pathan Student ID: 189933237 Date: 02/12/2025
+*
 ********************************************************************************/
 
 require('dotenv').config();
