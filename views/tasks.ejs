@@ -1,33 +1,64 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"/><title>Tasks</title></head>
-<body>
-  <%- include('partials/header', { user: user }) %>
-  <h2>Your Tasks</h2>
-  <p><a href="/tasks/add">Add a new task</a></p>
-  <% if (tasks && tasks.length) { %>
-    <table border="1">
-      <tr><th>Title</th><th>Due</th><th>Status</th><th>Actions</th></tr>
-      <% tasks.forEach(task => { %>
-        <tr>
-          <td><%= task.title %></td>
-          <td><%= task.dueDate ? new Date(task.dueDate).toLocaleString() : '' %></td>
-          <td><%= task.status %></td>
-          <td>
-            <a href="/tasks/edit/<%= task.id %>">Edit</a>
-            <form style="display:inline" method="post" action="/tasks/delete/<%= task.id %>">
-              <button type="submit" onclick="return confirm('Delete task?')">Delete</button>
-            </form>
-            <form style="display:inline" method="post" action="/tasks/status/<%= task.id %>">
-              <input type="hidden" name="status" value="<%= task.status === 'pending' ? 'completed' : 'pending' %>" />
-              <button type="submit"><%= task.status === 'pending' ? 'Mark Completed' : 'Mark Pending' %></button>
-            </form>
-          </td>
-        </tr>
-      <% }) %>
-    </table>
+<%- include('partials/header', { title: 'Your Tasks' }) %>
+
+<section class="card">
+  <div class="tasks-header">
+    <h1>Your tasks</h1>
+    <a href="/tasks/add" class="btn btn-primary">+ Add task</a>
+  </div>
+
+  <% if (tasks && tasks.length > 0) { %>
+    <div class="tasks-table-wrapper">
+      <table class="tasks-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Due date</th>
+            <th>Status</th>
+            <th style="width: 1%;">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% tasks.forEach(task => { %>
+            <tr>
+              <td>
+                <span class="task-title"><%= task.title %></span>
+              </td>
+              <td><%= task.description || '-' %></td>
+              <td>
+                <%= task.dueDate ? task.dueDate.toISOString().slice(0, 10) : '-' %>
+              </td>
+              <td>
+                <span class="task-status-pill <%= task.status === 'completed' ? 'completed' : 'pending' %>">
+                  <%= task.status === 'completed' ? 'Completed' : 'Pending' %>
+                </span>
+              </td>
+              <td>
+                <div class="task-row-actions">
+                  <a href="/tasks/edit/<%= task.id %>" class="btn btn-ghost btn-xs">Edit</a>
+
+                  <form method="post" action="/tasks/status/<%= task.id %>">
+                    <input type="hidden" name="status" value="<%= task.status === 'completed' ? 'pending' : 'completed' %>" />
+                    <button type="submit" class="btn btn-ghost btn-xs">
+                      <%= task.status === 'completed' ? 'Mark pending' : 'Mark done' %>
+                    </button>
+                  </form>
+
+                  <form method="post" action="/tasks/delete/<%= task.id %>" onsubmit="return confirm('Delete this task?');">
+                    <button type="submit" class="btn btn-danger btn-xs">Delete</button>
+                  </form>
+                </div>
+              </td>
+            </tr>
+          <% }) %>
+        </tbody>
+      </table>
+    </div>
   <% } else { %>
-    <p>No tasks yet.</p>
+    <p class="tasks-empty">
+      You don’t have any tasks yet. Click “Add task” to create your first one.
+    </p>
   <% } %>
-</body>
-</html>
+</section>
+
+<%- include('partials/footer') %>

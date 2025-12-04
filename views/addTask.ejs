@@ -1,15 +1,48 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"/><title>Add Task</title></head>
-<body>
-  <%- include('partials/header', { user: user }) %>
-  <h2>Add Task</h2>
-  <form method="post" action="/tasks/add">
-    <label>Title: <input name="title" required /></label><br/>
-    <label>Description: <textarea name="description"></textarea></label><br/>
-    <label>Due Date: <input type="datetime-local" name="dueDate" /></label><br/>
-    <button type="submit">Add</button>
+<%- include('partials/header', { title: 'Add Task' }) %>
+
+<section class="card">
+  <h1 class="section-title">Create a new task</h1>
+  <p class="section-subtitle">
+    Give your task a clear title, optional description, and an optional due date.
+  </p>
+
+  <% if (errorMsg) { %>
+    <div class="alert alert-error"><%= errorMsg %></div>
+  <% } %>
+
+  <form method="post" action="/tasks/add" class="form">
+    <div class="form-group">
+      <label class="form-label" for="title">Title</label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        class="form-input"
+        placeholder="Ex: Finish WEB322 assignment"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-textarea"
+        placeholder="Add any important notes or details..."
+      ></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="dueDate">Due date</label>
+      <input id="dueDate" name="dueDate" type="date" class="form-input" />
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save task</button>
+      <a href="/tasks" class="btn btn-outline">Cancel</a>
+    </div>
   </form>
-  <p style="color:red"><%= errorMsg %></p>
-</body>
-</html>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,14 +1,49 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"/><title>Login</title></head>
-<body>
-  <%- include('partials/header', { user: null }) %>
-  <h2>Login</h2>
-  <form method="post" action="/login">
-    <label>Username: <input name="username" required /></label><br/>
-    <label>Password: <input type="password" name="password" required /></label><br/>
-    <button type="submit">Login</button>
-  </form>
-  <p style="color:red"><%= errorMsg %></p>
-</body>
-</html>
+<%- include('partials/header', { title: 'Login' }) %>
+
+<section class="auth-wrapper">
+  <div class="auth-card">
+    <h1 class="auth-title">Welcome back</h1>
+    <p class="auth-subtitle">Log in to manage your tasks and stay on track.</p>
+
+    <% if (errorMsg) { %>
+      <div class="alert alert-error"><%= errorMsg %></div>
+    <% } %>
+
+    <form method="post" action="/login" class="form">
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          class="form-input"
+          placeholder="Enter your username"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-input"
+          placeholder="Enter your password"
+          required
+        />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Log in</button>
+      </div>
+    </form>
+
+    <p class="form-footer-text">
+      New here?
+      <a href="/register">Create an account</a>
+    </p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

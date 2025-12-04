@@ -1,15 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"/><title>Register</title></head>
-<body>
-  <%- include('partials/header', { user: null }) %>
-  <h2>Register</h2>
-  <form method="post" action="/register">
-    <label>Username: <input name="username" required /></label><br/>
-    <label>Email: <input type="email" name="email" required /></label><br/>
-    <label>Password: <input type="password" name="password" required /></label><br/>
-    <button type="submit">Register</button>
-  </form>
-  <p style="color:red"><%= errorMsg %></p>
-</body>
-</html>
+<%- include('partials/header', { title: 'Register' }) %>
+
+<section class="auth-wrapper">
+  <div class="auth-card">
+    <h1 class="auth-title">Create your account</h1>
+    <p class="auth-subtitle">Sign up to start organizing your tasks.</p>
+
+    <% if (errorMsg) { %>
+      <div class="alert alert-error"><%= errorMsg %></div>
+    <% } %>
+
+    <form method="post" action="/register" class="form">
+      <div class="form-group">
+        <label class="form-label" for="username">Username</label>
+        <input
+          type="text"
+          id="username"
+          name="username"
+          class="form-input"
+          placeholder="Choose a username"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          class="form-input"
+          placeholder="email@example.com"
+          required
+        />
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          class="form-input"
+          placeholder="Create a secure password"
+          required
+        />
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn btn-primary">Create account</button>
+      </div>
+    </form>
+
+    <p class="form-footer-text">
+      Already have an account?
+      <a href="/login">Log in instead</a>
+    </p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,9 +1,32 @@
-<header>
-  <h1>WEB322 Task App</h1>
-  <% if (user) { %>
-    <p>Welcome, <%= user.username %> | <a href="/dashboard">Dashboard</a> | <a href="/tasks">Tasks</a> | <a href="/logout">Logout</a></p>
-  <% } else { %>
-    <p><a href="/login">Login</a> | <a href="/register">Register</a></p>
-  <% } %>
-  <hr />
-</header>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title><%= title || 'Task Manager' %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/styles.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a href="/" class="logo">
+          Task<span>Flow</span>
+        </a>
+
+        <nav class="main-nav">
+          <% if (user) { %>
+            <a href="/dashboard">Dashboard</a>
+            <a href="/tasks">Tasks</a>
+            <a href="/tasks/add">Add Task</a>
+            <span class="nav-user">Signed in as <strong><%= user.username %></strong></span>
+            <a href="/logout" class="btn btn-outline">Logout</a>
+          <% } else { %>
+            <a href="/login">Login</a>
+            <a href="/register" class="btn btn-primary">Register</a>
+          <% } %>
+        </nav>
+      </div>
+    </header>
+
+    <main class="page-main">
+      <div class="container">

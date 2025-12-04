@@ -1,20 +1,61 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"/><title>Edit Task</title></head>
-<body>
-  <%- include('partials/header', { user: user }) %>
-  <h2>Edit Task</h2>
-  <form method="post" action="/tasks/edit/<%= task.id %>">
-    <label>Title: <input name="title" value="<%= task.title %>" required /></label><br/>
-    <label>Description: <textarea name="description"><%= task.description %></textarea></label><br/>
-    <label>Due Date: <input type="datetime-local" name="dueDate" value="<%= task.dueDate ? new Date(task.dueDate).toISOString().slice(0,16) : '' %>" /></label><br/>
-    <label>Status:
-      <select name="status">
-        <option value="pending" <%= task.status==='pending' ? 'selected' : '' %>>Pending</option>
-        <option value="completed" <%= task.status==='completed' ? 'selected' : '' %>>Completed</option>
+<%- include('partials/header', { title: 'Edit Task' }) %>
+
+<section class="card">
+  <h1 class="section-title">Edit task</h1>
+  <p class="section-subtitle">
+    Update the details or status of your task.
+  </p>
+
+  <form method="post" action="/tasks/edit/<%= task.id %>" class="form">
+    <div class="form-group">
+      <label class="form-label" for="title">Title</label>
+      <input
+        id="title"
+        name="title"
+        type="text"
+        class="form-input"
+        value="<%= task.title %>"
+        required
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="description">Description</label>
+      <textarea
+        id="description"
+        name="description"
+        class="form-textarea"
+      ><%= task.description || '' %></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="dueDate">Due date</label>
+      <input
+        id="dueDate"
+        name="dueDate"
+        type="date"
+        class="form-input"
+        value="<%= task.dueDate ? task.dueDate.toISOString().slice(0, 10) : '' %>"
+      />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="status">Status</label>
+      <select id="status" name="status" class="form-select">
+        <option value="pending" <%= task.status === 'pending' ? 'selected' : '' %>>
+          Pending
+        </option>
+        <option value="completed" <%= task.status === 'completed' ? 'selected' : '' %>>
+          Completed
+        </option>
       </select>
-    </label><br/>
-    <button type="submit">Save</button>
+    </div>
+
+    <div class="form-actions">
+      <button type="submit" class="btn btn-primary">Save changes</button>
+      <a href="/tasks" class="btn btn-outline">Cancel</a>
+    </div>
   </form>
-</body>
-</html>
+</section>
+
+<%- include('partials/footer') %>

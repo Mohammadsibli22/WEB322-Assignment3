@@ -1,8 +1,16 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"/><title>Not Found</title></head>
-<body>
-  <%- include('partials/header', { user: null }) %>
-  <h2>404 - Page Not Found</h2>
-</body>
-</html>
+<%- include('partials/header', { title: 'Not Found' }) %>
+
+<section class="not-found-page">
+  <div class="card">
+    <h1>404</h1>
+    <p>Oops! The page you’re looking for doesn’t exist.</p>
+    <p>Please check the URL or return to your dashboard.</p>
+
+    <div class="form-actions" style="justify-content: center; margin-top: 1.25rem;">
+      <a href="/dashboard" class="btn btn-primary">Back to dashboard</a>
+      <a href="/tasks" class="btn btn-outline">View tasks</a>
+    </div>
+  </div>
+</section>
+
+<%- include('partials/footer') %>

@@ -1,11 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head><meta charset="utf-8"/><title>Dashboard</title></head>
-<body>
-  <%- include('partials/header', { user: user }) %>
-  <h2>Dashboard</h2>
-  <h3>Hello <%= user.username %></h3>
-  <p>Your email: <%= user.email %></p>
-  <p><a href="/tasks">View Your Tasks</a> | <a href="/tasks/add">Add Task</a></p>
-</body>
-</html>
+<%- include('partials/header', { title: 'Dashboard' }) %>
+
+<section class="dashboard">
+  <div class="dashboard-hero">
+    <h1>Hi <%= user && user.username ? user.username : 'there' %> 👋</h1>
+    <p>
+      Welcome to your task dashboard. Create tasks, update their status, and keep yourself organized.
+    </p>
+
+    <div class="dashboard-actions">
+      <a href="/tasks/add" class="btn btn-primary">Create new task</a>
+      <a href="/tasks" class="btn btn-outline">View all tasks</a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Getting started</h2>
+    <p class="section-subtitle">
+      Use the navigation bar or the buttons above to add tasks or review your existing ones.
+      All tasks are securely associated with your account.
+    </p>
+  </div>
+</section>
+
+<%- include('partials/footer') %>
